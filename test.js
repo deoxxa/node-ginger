@@ -40,5 +40,9 @@ var compiled = compiler.compile(parsed);
 //console.log("");
 
 ctx.add_template("index", new Function("ctx", compiled));
+ctx.add_template("header", new Function("ctx", compiler.compile(Ginger.Parser.parse(fs.readFileSync("res/included.twig").toString()))));
+ctx.add_template("footer", new Function("ctx", compiler.compile(Ginger.Parser.parse(fs.readFileSync("res/included.twig").toString()))));
+
+console.log(ctx.get_template("index").toString());
 
 console.log(ctx.render("index"));

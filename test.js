@@ -25,19 +25,24 @@ try {
   process.exit();
 }
 
-console.log(JSON.stringify(parsed, null, 2));
-console.log("");
+//console.log(JSON.stringify(parsed, null, 2));
+//console.log("");
 
 var ast = compiler.make_ast(parsed);
-console.log(JSON.stringify(ast, null, 2));
-console.log("");
+//console.log(JSON.stringify(ast, null, 2));
+//console.log("");
 
 var compiled = compiler.compile(parsed);
-console.log(compiled);
-console.log("");
+//console.log(compiled);
+//console.log("");
 
-console.log(data);
-console.log("");
+//console.log(data);
+//console.log("");
 
-var f = new Function("ctx", compiled);
-console.log(f(ctx));
+ctx.add_template("index", new Function("ctx", compiled));
+ctx.add_template("header", new Function("ctx", compiler.compile(Ginger.Parser.parse(fs.readFileSync("res/included.twig").toString()))));
+ctx.add_template("footer", new Function("ctx", compiler.compile(Ginger.Parser.parse(fs.readFileSync("res/included.twig").toString()))));
+
+console.log(ctx.get_template("index").toString());
+
+console.log(ctx.render("index"));

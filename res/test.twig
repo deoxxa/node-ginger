@@ -4,6 +4,7 @@
     <title>{{ title|default("Home") }}</title>
   </head>
   <body>
+{% include "header" %}
     <ul>
 {% for person in people %}
       <li>
@@ -19,5 +20,6 @@
       </li>
 {% endfor %}
     </ul>
+{% include "footer" %}
   </body>
 </html>

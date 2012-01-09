@@ -1,0 +1,155 @@
+start = document
+
+document = ( raw_data / logic / print / comment )*
+
+raw_data = d:[^{]+ {
+  return {
+    type: "raw",
+    data: d.join(""),
+  };
+}
+
+quoted_string = '"' d:([^"\\] / '\\"' / '\\\\')* '"' {
+  return {
+    type: "string",
+    data: d.join("").replace(/\\/g, "\\"),
+  };
+}
+
+number = s:"-"? p:[0-9]+ d:("." [0-9]+)? {
+  return {
+    type: "number",
+    data: parseFloat((s ? "-" : "") + p + "." + (d ? d[1] : 0)),
+  };
+}
+
+white_space = d:[ \r\n]+ {
+  return {
+    type: "white_space",
+    data: d.join(""),
+  };
+}
+
+identifier = d:([a-zA-Z_] [a-zA-Z_0-9]* "."?) {
+  return {
+    type: "identifier",
+    name: d ? d.map(function(e) { return typeof e == "string" ? e : e.join(""); }).join("").replace(/\.$/, "") : [],
+  };
+}
+
+path = p:(identifier / identifier ".")+ {
+  return {
+    type: "path",
+    parts: p ? p.map(function(p) { return p.name; }) : [],
+  };
+}
+
+function = n:identifier a:("(" arguments? ")")? {
+  return {
+    type: "function",
+    name: n,
+    arguments: a ? a[1] : [],
+  };
+}
+
+arguments = f:expression o:("," expression)* {
+  return [f].concat(o);
+}
+
+expression = s:(number / path / function / quoted_string) f:( "|" function )* {
+  return {
+    source: s,
+    filters: f ? f.map(function(f) { return f[1]; }) : [],
+  };
+}
+
+comparator = t:("==" / "<" / ">" / "<=" / ">=") white_space e:expression {
+  return {
+    type: t,
+    expression: e,
+  };
+}
+
+condition = e:expression c:(white_space c:comparator)? {
+  return {
+    source: e,
+    comparison: c ? c[1] : null,
+  };
+}
+
+/**
+ * print statement
+ */
+
+print = "{{" white_space? e:expression white_space? "}}" {
+  return {
+    type: "print",
+    expression: e,
+  };
+}
+
+/**
+ * comments
+ */
+
+comment = "{#" d:([^#] / "#" [^}])* "#}" {
+  return {
+    type: "comment",
+    data: d.join(""),
+  };
+}
+
+/**
+ * logic control statements
+ */
+
+logic = logic_if / logic_for / logic_extends / logic_include
+
+logic_open = "{%"
+logic_close = "%}"
+
+logic_if_open = logic_open white_space? "if" white_space? c:condition white_space? logic_close {
+  return c;
+}
+logic_if_else = logic_open white_space? "else" white_space? logic_close
+logic_if_close = logic_open white_space? "endif" white_space? logic_close
+logic_if = c:logic_if_open d:document e:( logic_if_else e:document )? logic_if_close {
+  return {
+    type: "if",
+    condition: c,
+    action: d,
+    else: e ? e[1] : null,
+  };
+}
+
+logic_for_open = logic_open white_space? "for" white_space k:identifier v:( white_space? "," white_space? identifier )? white_space "in" white_space s:expression white_space? logic_close {
+  return {
+    source: s,
+    key: v ? k : null,
+    value: v ? v[3] : k,
+  };
+}
+logic_for_else = logic_open white_space? "else" white_space? logic_close
+logic_for_close = logic_open white_space? "endfor" white_space? logic_close
+logic_for = c:logic_for_open d:document e:( logic_for_else document )? logic_for_close {
+  return {
+    type: "for",
+    config: c,
+    action: d,
+    else: e ? e[1] : null,
+  };
+}
+
+logic_extends = logic_open white_space? "extends" white_space e:expression white_space? logic_close {
+  return {
+    type: "extends",
+    expression: e,
+  };
+}
+
+logic_include = logic_open white_space? "include" white_space e:expression white_space? logic_close {
+  return {
+    type: "include",
+    expression: e,
+  };
+}

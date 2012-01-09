@@ -13,6 +13,8 @@ var ctx = new Ginger.Context({
   people: [
     {name: "jack", gender: "male", age: 15, hobbies: ["fetching water", "going up hills", "falling down"]},
     {name: "jill", gender: "female", age: 14, hobbies: ["following jack"]},
+    {name: "bowie", gender: "unknown", age: 999},
+    {name: "-"},
   ],
 });
 ctx.add_function("default", function(input, args) { return input || args[0]; });

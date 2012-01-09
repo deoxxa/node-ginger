@@ -8,6 +8,11 @@
 {% for person in people %}
       <li>
         {{ person.name|ucwords }} {% if person.age > 5 %}({{ person.age }}){% endif %}
+        [{%    if person.gender == "male"    %}{{ "M" }}
+         {% elsif person.gender == "female"  %}{{ "F" }}
+         {% elsif person.gender == "unknown" %}{{ "U" }}
+         {% else                             %}{{ "?" }}
+         {% endif %}]
 {% if person.hobbies %}
         <ul>
           <li><strong>Hobbies</strong></li>

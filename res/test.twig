@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ title|default("Home") }}</title>
+  </head>
+  <body>
+    <ul>
+{% for person in people %}
+      <li>
+        {{ person.name|ucwords }} {% if person.age > 5 %}({{ person.age }}){% endif %}
+{% if person.hobbies %}
+        <ul>
+          <li><strong>Hobbies</strong></li>
+{% for hobby in person.hobbies %}
+          <li>{{ hobby }}</li>
+{% endfor %}
+        </ul>
+{% endif %}
+      </li>
+{% endfor %}
+    </ul>
+  </body>
+</html>

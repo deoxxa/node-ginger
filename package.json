@@ -1,0 +1,25 @@
+{
+  "name": "ginger",
+  "description": "Spicy templating for node and the browser inspired by Twig, Dust.JS and Hogan.JS",
+  "version": "0.0.1",
+  "author": {
+    "name": "Conrad Pankoff",
+    "email": "deoxxa@fknsrs.biz",
+    "url": "http://www.fknsrs.biz/"
+  },
+  "url": "http://github.com/deoxxa/node-ginger",
+  "license" : "BSD",
+  "repository" : { "type":"git", "url":"git://github.com/deoxxa/node-ginger.git" },
+  "keywords" : [
+    "ginger",
+    "template",
+    "templating"
+  ],
+  "main": "./lib/ginger",
+  "dependencies": {
+    "uglify-js": "1.2.x"
+  },
+  "engines": {
+    "node" : ">=0.4.12"
+  }
+}

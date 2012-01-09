@@ -111,13 +111,24 @@ logic_close = "%}"
 logic_if_open = logic_open white_space? "if" white_space? c:condition white_space? logic_close {
   return c;
 }
+logic_if_elsif = logic_open white_space? "elsif" white_space? c:condition white_space? logic_close {
+  return c;
+}
 logic_if_else = logic_open white_space? "else" white_space? logic_close
 logic_if_close = logic_open white_space? "endif" white_space? logic_close
-logic_if = c:logic_if_open d:document e:( logic_if_else e:document )? logic_if_close {
+logic_if = c:logic_if_open d:document l:( logic_if_elsif l:document )* e:( logic_if_else e:document )? logic_if_close {
+  var ls = [];
+  for (var i = 0; i < l.length; i++) {
+    ls.push({
+      condition: l[i][0],
+      action: l[i][1],
+    });
+  }
   return {
     type: "if",
     condition: c,
     action: d,
+    elsifs: ls.length ? ls : null,
     else: e ? e[1] : null,
   };
 }

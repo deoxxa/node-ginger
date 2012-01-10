@@ -1,4 +1,6 @@
-start = document
+start = e:logic_extends? d:document {
+  return [e].filter(function(n) { return !!n; }).concat(d);
+}
 
 document = ( raw_data / logic / print / comment )*
 
@@ -56,9 +58,10 @@ arguments = f:expression o:("," expression)* {
   return [f].concat(o);
 }
 
-expression = s:(number / path / function / quoted_string) f:( "|" function )* {
+expression = n:("!" white_space?)? s:(number / path / function / quoted_string) f:( "|" function )* {
   return {
     source: s,
+    negative: n ? true : false,
     filters: f ? f.map(function(f) { return f[1]; }) : [],
   };
 }
@@ -103,7 +106,7 @@ comment = "{#" d:([^#] / "#" [^}])* "#}" {
  * logic control statements
  */
 
-logic = logic_if / logic_for / logic_extends / logic_include
+logic = logic_if / logic_for / logic_extends / logic_include / logic_block
 
 logic_open = "{%"
 logic_close = "%}"
@@ -149,6 +152,18 @@ logic_for = c:logic_for_open d:document e:( logic_for_else document )? logic_for
     action: d,
     else: e ? e[1] : null,
   };
+}
+
+logic_block_open = logic_open white_space? "block" white_space e:expression white_space? logic_close {
+  return e;
+}
+logic_block_close = logic_open white_space? "endblock" white_space? logic_close
+logic_block = e:logic_block_open d:document? logic_block_close {
+  return {
+    type: "block",
+    expression: e,
+    content: d,
+  }
 }
 
 logic_extends = logic_open white_space? "extends" white_space e:expression white_space? logic_close {

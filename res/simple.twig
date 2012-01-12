@@ -1,0 +1,12 @@
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Age</th>
+  </tr>
+{% for person in people %}
+  <tr>
+    <td>{{ person.name|ucwords }}</td>
+    <td>{{ person.age|default("unknown") }}</td>
+  </tr>
+{% endfor %}
+</table>

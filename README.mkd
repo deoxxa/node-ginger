@@ -1,0 +1,138 @@
+Ginger
+======
+
+Spicy templating for node and the browser inspired by Twig, Dust and Hogan.js
+
+Overview
+--------
+
+Ginger is designed to be easy to use and extend, very portable and quick.
+Drawing inspiration for its syntax from Twig and jinja2, streaming rendering
+from dust and portability from Hogan.js, it is intended to bring the best
+aspects from existing libraries together in one package.
+
+Ginger compiles a Twig/jinja2 style template language to native JavaScript
+functions, with minimal dependencies. By using a subset of the language, a
+compiled template file can be used without any client side library whatsoever.
+To gain the full feature set, however, only a few extra kilobytes are required.
+
+Features
+--------
+
+1. Simple, expressive syntax
+2. Loops and conditional statements
+3. User defined filters and data sources
+4. Template inheritence
+5. Template inclusion
+6. Safe runtime, no direct variable access in compiled templates
+
+Documentation
+-------------
+
+This is lacking right now! There's some test templates in res/*.twig if you want
+to see all the fun stuff Ginger can currently do, though. Help with this point
+would be greatly appreciated!
+
+Example Template
+----------------
+
+```html
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Age</th>
+      </tr>
+    {% for person in people %}
+      <tr>
+        <td>{{ person.name|ucwords }}</td>
+        <td>{{ person.age|default("unknown") }}</td>
+      </tr>
+    {% endfor %}
+    </table>
+```
+
+Example Usage
+-------------
+
+```javascript
+    var compiler = new Ginger.Compiler();
+
+    var ctx = new Ginger.Context({
+      people: [
+        {name: "jack", gender: "male", age: 15, hobbies: ["fetching water", "going up hills", "falling down"]},
+        {name: "jill", gender: "female", age: 14, hobbies: ["following jack"]},
+        {name: "bowie", gender: "unknown", age: 999},
+        {name: "-"},
+      ],
+    });
+    ctx.add_function("default", function(input, args) { return input || args[0]; });
+    ctx.add_function("ucwords", function(input, args) { return input.replace(/(^|\s)([a-z])/g, function(m, p1, p2) { return p1 + p2.toUpperCase(); }); });
+
+    ctx.add_template("simple", new Function("ctx", compiler.compile(Ginger.Parser.parse(fs.readFileSync("res/simple.twig").toString()))));
+    ctx.add_template("index", new Function("ctx", compiler.compile(Ginger.Parser.parse(fs.readFileSync("res/index.twig").toString()))));
+    ctx.add_template("layout", new Function("ctx", compiler.compile(Ginger.Parser.parse(fs.readFileSync("res/layout.twig").toString()))));
+    ctx.add_template("header", new Function("ctx", compiler.compile(Ginger.Parser.parse(fs.readFileSync("res/included.twig").toString()))));
+    ctx.add_template("footer", new Function("ctx", compiler.compile(Ginger.Parser.parse(fs.readFileSync("res/included.twig").toString()))));
+
+    console.log(ctx.render("simple"));
+```
+
+Example Compiled JavaScript
+---------------------------
+
+```javascript
+    function anonymous(ctx) {
+      var o = "", e = true;
+      ctx = ctx.create_child();
+      o += "<table>\n  <tr>\n    <th>Name</th>\n    <th>Age</th>\n  </tr>\n";
+      var _tmp_key_0 = "", _tmp_obj_1 = ctx.get_value([ "people" ]);
+      for (_tmp_key_0 in _tmp_obj_1) {
+        ctx = ctx.create_child({
+          person: _tmp_obj_1[_tmp_key_0],
+          key: _tmp_key_0
+        });
+        o += "\n  <tr>\n    <td>";
+        o += ctx.call_function("ucwords", ctx.get_value([ "person", "name" ]), []);
+        o += "</td>\n    <td>";
+        o += ctx.call_function("default", ctx.get_value([ "person", "age" ]), [ "unknown" ]);
+        o += "</td>\n  </tr>\n";
+        ctx = ctx.leave_parent();
+      }
+      o += "\n</table>";
+      ctx = ctx.leave_parent();
+      return o;
+    }
+```
+
+Example output
+--------------
+
+```html
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Age</th>
+      </tr>
+
+      <tr>
+        <td>Jack</td>
+        <td>15</td>
+      </tr>
+
+      <tr>
+        <td>Jill</td>
+        <td>14</td>
+      </tr>
+
+      <tr>
+        <td>Bowie</td>
+        <td>999</td>
+      </tr>
+
+      <tr>
+        <td>-</td>
+        <td>unknown</td>
+      </tr>
+
+    </table>
+```

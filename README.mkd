@@ -29,9 +29,9 @@ Features
 Documentation
 -------------
 
-This is lacking right now! There's some test templates in res/*.twig if you want
-to see all the fun stuff Ginger can currently do, though. Help with this point
-would be greatly appreciated!
+This is lacking right now! There are some test templates in res/*.twig if you
+want to see all the fun stuff Ginger can currently do, though. Help with this
+point would be greatly appreciated!
 
 Example Template
 ----------------

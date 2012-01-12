@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ title|default("Home") }}</title>
+  </head>
+  <body>
+{% include "header" %}
+{% block "content" %}Default content{% endblock %}
+{% include "footer" %}
+  </body>
+</html>

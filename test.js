@@ -30,7 +30,7 @@ try {
 //console.log(JSON.stringify(parsed, null, 2));
 //console.log("");
 
-var ast = compiler.make_ast(parsed);
+//var ast = compiler.make_ast(parsed);
 //console.log(JSON.stringify(ast, null, 2));
 //console.log("");
 
@@ -42,6 +42,7 @@ var compiled = compiler.compile(parsed);
 //console.log("");
 
 ctx.add_template("index", new Function("ctx", compiled));
+ctx.add_template("layout", new Function("ctx", compiler.compile(Ginger.Parser.parse(fs.readFileSync("res/layout.twig").toString()))));
 ctx.add_template("header", new Function("ctx", compiler.compile(Ginger.Parser.parse(fs.readFileSync("res/included.twig").toString()))));
 ctx.add_template("footer", new Function("ctx", compiler.compile(Ginger.Parser.parse(fs.readFileSync("res/included.twig").toString()))));
 

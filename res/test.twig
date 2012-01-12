@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>{{ title|default("Home") }}</title>
-  </head>
-  <body>
-{% include "header" %}
+{% extends "layout" %}
+
+{% block "content" %}
     <ul>
 {% for person in people %}
       <li>
@@ -25,6 +21,4 @@
       </li>
 {% endfor %}
     </ul>
-{% include "footer" %}
-  </body>
-</html>
+{% endblock %}

@@ -1,7 +1,7 @@
 {
   "name": "ginger",
   "description": "Spicy templating for node and the browser inspired by Twig, Dust.JS and Hogan.JS",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "author": {
     "name": "Conrad Pankoff",
     "email": "deoxxa@fknsrs.biz",
@@ -16,7 +16,11 @@
     "templating"
   ],
   "main": "./lib/ginger",
+  "bin": {
+    "gari": "./bin/gari"
+  },
   "dependencies": {
+    "optimist": "0.3.x",
     "uglify-js": "1.2.x"
   },
   "engines": {

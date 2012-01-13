@@ -25,6 +25,7 @@ Features
 4. Template inheritence
 5. Template inclusion
 6. Safe runtime, no direct variable access in compiled templates
+7. Static file compiler
 
 Documentation
 -------------
@@ -32,6 +33,32 @@ Documentation
 This is lacking right now! There are some test templates in res/*.twig if you
 want to see all the fun stuff Ginger can currently do, though. Help with this
 point would be greatly appreciated!
+
+Gari
+----
+
+There is a tool included to compile template files to static .js files named
+"gari". You can find it in the "bin" directory, or in your path if you installed
+Ginger via npm and installed it globally.
+
+gari recursively compiles all the templates in the directory where it is run
+into one stand-alone JavaScript file. The resulting file can be used via a
+CommonJS style require() or by simply including it in a web page.
+
+gari accepts various options:
+
+* n (name) - name of the root context object (default ctx)
+* e (export) - attach the root context object to module.exports (default no)
+* o (output) - write the compiled data to a file instead of stdout
+* b (beautify) - output formatted JavaScript as opposed to minified (default no)
+* i (include-context) - include the Context object in the output (default yes)
+
+Use of gari is as follows:
+
+    $ gari [-b] [-i] [-e] [-n name] [-o file]
+
+If you do not specify the -e option, you will find the context object named as
+specified in the -n argument.
 
 Example Template
 ----------------

@@ -16,7 +16,11 @@
     "templating"
   ],
   "main": "./lib/ginger",
+  "bin": {
+    "gari": "./bin/gari"
+  },
   "dependencies": {
+    "optimist": "0.3.x",
     "uglify-js": "1.2.x"
   },
   "engines": {

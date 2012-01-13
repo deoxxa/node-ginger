@@ -4,10 +4,20 @@ start = e:logic_extends? d:document {
 
 document = ( raw_data / logic / print / comment )*
 
-raw_data = d:[^{]+ {
+raw_data = d:( ( [^{]+ ( "{" [^{%#] )? ) / ( "{" [^{%#] ) )+ {
+  var f = function(a) {
+    return a.map(function(e) {
+      if (typeof e == "object" && e instanceof Array) {
+        return f(e);
+      } else {
+        return e;
+      }
+    }).join("");
+  }
+
   return {
     type: "raw",
-    data: d.join(""),
+    data: f(d),
   };
 }
 

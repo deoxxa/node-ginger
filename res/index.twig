@@ -1,3 +1,7 @@
+{#
+ # This is a test template, as evidenced by its name "test.twig".
+ #}
+
 {% extends "layout" %}
 
 {% block "content" %}
@@ -21,4 +25,14 @@
       </li>
 {% endfor %}
     </ul>
+
+    <span>{{ "-" }}{x{{ "-" }}</span>
+
+    <script>
+if (Math.random() > 0.5) {
+  console.log(true);
+} else {
+  console.log(false);
+}
+    </script>
 {% endblock %}

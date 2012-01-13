@@ -1,0 +1,113 @@
+#!/usr/bin/env node
+
+var fs = require("fs"),
+    optimist = require("optimist"),
+    uglify = require("uglify-js"),
+    Ginger = require("../lib/ginger");
+
+function compile_path(path, ast) {
+  console.warn("Compiling " + path);
+
+  var stat = fs.statSync(path);
+
+  if (stat.isDirectory()) {
+    fs.readdirSync(path).forEach(function(entry) {
+      compile_path(path + "/" + entry, ast);
+    });
+  } else if (path.match(/\.twig$/)) {
+    var data = fs.readFileSync(path).toString();
+
+    try {
+      console.warn("Trying to parse data...");
+      var parsed = Ginger.Parser.parse(data);
+      console.warn("Done.");
+    } catch (e) {
+      console.warn("Error parsing data: ", (e.stack || e));
+      return;
+    }
+
+    ast.push([
+      "call",
+      ["dot", ["name", root_object_name], "add_template"],
+      [
+        ["string", path.replace(/^\.\//, "").replace(/\.twig$/, "")],
+        ["function", null, ["ctx"], compiler.make_ast(parsed)],
+      ],
+    ]);
+  }
+}
+
+var argv = optimist.options({
+  n: {
+    alias: "name",
+    description: "Name of the root context object",
+    default: "ctx",
+  },
+  e: {
+    alias: "export",
+    description: "Set module.exports to point at the root context",
+  },
+  o: {
+    alias: "output",
+    description: "Where to put the compiled template file (default stdout)",
+  },
+  b: {
+    alias: "beautify",
+    description: "Produce slightly larger, but easier to read output",
+  },
+  i: {
+    alias: "include-context",
+    description: "Include the code for the Ginger.Context object",
+  },
+}).argv;
+
+var compiler = new Ginger.Compiler();
+
+var ast = [];
+
+if (argv.i) {
+  ast.push(["var", [
+    ["Context", ["call", [
+      "function",
+      null,
+      [],
+      [].concat(
+        [["var", [["module", ["object", []]]]]],
+        uglify.parser.parse(fs.readFileSync(__dirname + "/../lib/context.js").toString())[1],
+        [["return", ["dot", ["name", "module"], "exports"]]]
+      ),
+    ], []]],
+  ]]);
+}
+
+var root_object_name = argv.n;
+
+ast.push(["var", [
+  [root_object_name, ["new", ["name", "Context"], []]],
+]]);
+
+if (argv.e) {
+  ast.push(["stat", [
+    "assign",
+    true,
+    ["dot", ["name", "module"], "exports"],
+    ["name", root_object_name],
+  ]]);
+}
+
+compile_path(".", ast);
+
+var code = uglify.uglify.gen_code(["toplevel", ast], {beautify: argv.b});
+
+if (argv.o) {
+  fs.writeFile(argv.o, code, function(err) {
+    if (err) {
+      console.warn(err);
+      return;
+    }
+
+    console.warn("Done!");
+  });
+} else {
+  console.log(code);
+}

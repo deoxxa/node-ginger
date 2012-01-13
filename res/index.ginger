@@ -1,5 +1,5 @@
 {#
- # This is a test template, as evidenced by its name "test.twig".
+ # This is a test template
  #}
 
 {% extends "layout" %}

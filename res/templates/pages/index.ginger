@@ -1,8 +1,6 @@
-{#
- # This is a test template, as evidenced by its name "test.twig".
- #}
-
 {% extends "layout" %}
+
+{% block "title" %}Home{% endblock %}
 
 {% block "content" %}
     <ul>

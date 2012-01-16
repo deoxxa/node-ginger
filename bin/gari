@@ -14,7 +14,7 @@ function compile_path(path, ast) {
     fs.readdirSync(path).forEach(function(entry) {
       compile_path(path + "/" + entry, ast);
     });
-  } else if (path.match(/\.twig$/)) {
+  } else if (path.match(/\.ginger$/)) {
     var data = fs.readFileSync(path).toString();
 
     try {
@@ -30,8 +30,8 @@ function compile_path(path, ast) {
       "call",
       ["dot", ["name", root_object_name], "add_template"],
       [
-        ["string", path.replace(/^\.\//, "").replace(/\.twig$/, "")],
-        ["function", null, ["ctx"], compiler.make_ast(parsed)],
+        ["string", path.replace(/^\.\//, "").replace(/\.ginger$/, "")],
+        ["function", null, ["ctx", "cb"], compiler.make_ast(parsed)],
       ],
     ]);
   }

@@ -1,0 +1,18 @@
+{% extends "layout" %}
+
+{% block "title" %}Users{% endblock %}
+
+{% block "content" %}
+<table>
+  <tr>
+    <th>Username</th>
+    <th>Email</th>
+  </tr>
+{% for user in users %}
+  <tr>
+    <td><a href="/user/{{ user.id }}">{{ user.name }}</a></td>
+    <td>{{ user.email }}</td>
+  </tr>
+{% endfor %}
+</table>
+{% endblock %}

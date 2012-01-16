@@ -1,8 +1,6 @@
-{#
- # This is a test template
- #}
-
 {% extends "layout" %}
+
+{% block "title" %}Home{% endblock %}
 
 {% block "content" %}
     <ul>

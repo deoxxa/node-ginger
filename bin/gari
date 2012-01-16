@@ -31,7 +31,7 @@ function compile_path(path, ast) {
       ["dot", ["name", root_object_name], "add_template"],
       [
         ["string", path.replace(/^\.\//, "").replace(/\.ginger$/, "")],
-        ["function", null, ["ctx"], compiler.make_ast(parsed)],
+        ["function", null, ["ctx", "cb"], compiler.make_ast(parsed)],
       ],
     ]);
   }

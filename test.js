@@ -3,9 +3,23 @@
 var fs = require("fs"),
     Ginger = require("./lib/ginger");
 
-var compiler = new Ginger.Compiler();
+var compiler = new Ginger.Compiler(),
+    root = new Ginger.Context(); //require("./static");
 
-var ctx = new Ginger.Context({
+root.on_not_found = function(name, cb) {
+  fs.readFile(__dirname + "/res/templates/" + name + ".ginger", function(err, data) {
+    if (err) {
+      return cb(err);
+    }
+
+    var parsed = Ginger.Parser.parse(data.toString());
+    var compiled = compiler.compile(parsed);
+
+    cb(null, new Function("ctx", "cb", compiled));
+  });
+};
+
+var ctx = root.create_child({
   people: [
     {name: "jack", gender: "male", age: 15, hobbies: ["fetching water", "going up hills", "falling down"]},
     {name: "jill", gender: "female", age: 14, hobbies: ["following jack"]},
@@ -16,10 +30,11 @@ var ctx = new Ginger.Context({
 ctx.add_function("default", function(input, args) { return input || args[0]; });
 ctx.add_function("ucwords", function(input, args) { return input.replace(/(^|\s)([a-z])/g, function(m, p1, p2) { return p1 + p2.toUpperCase(); }); });
 
-ctx.add_template("simple", new Function("ctx", compiler.compile(Ginger.Parser.parse(fs.readFileSync("res/simple.ginger").toString()))));
-ctx.add_template("index", new Function("ctx", compiler.compile(Ginger.Parser.parse(fs.readFileSync("res/index.ginger").toString()))));
-ctx.add_template("layout", new Function("ctx", compiler.compile(Ginger.Parser.parse(fs.readFileSync("res/layout.ginger").toString()))));
-ctx.add_template("header", new Function("ctx", compiler.compile(Ginger.Parser.parse(fs.readFileSync("res/included.ginger").toString()))));
-ctx.add_template("footer", new Function("ctx", compiler.compile(Ginger.Parser.parse(fs.readFileSync("res/included.ginger").toString()))));
+ctx.render("pages/index", function(err, data) {
+  if (err) {
+    console.log(err);
+    return;
+  }
 
-console.log(ctx.render("index"));
+  console.log(data);
+});

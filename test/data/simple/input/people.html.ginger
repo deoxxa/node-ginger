@@ -1,0 +1,16 @@
+<table>
+{% for person in people %}
+  <tr>
+    <td>{{ person.name }}</td>
+    <td>{{ person.gender }}</td>
+    <td>{{ person.age }}</td>
+    <td>
+      <ul>
+{% for hobby in person.hobbies %}
+        <li>{{ hobby }}</li>
+{% endfor %}
+      </ul>
+    </td>
+  </tr>
+{% endfor %}
+</table>

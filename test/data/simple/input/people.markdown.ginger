@@ -1,0 +1,10 @@
+= People
+
+{% for person in people %}== {{ person.name }}
+
+Gender: {{ person.gender }}
+Age: {{ person.age }}
+Hobbies:
+{% for hobby in person.hobbies %}- {{ hobby }}
+{% endfor %}
+{% endfor %}

@@ -19,11 +19,17 @@
   "bin": {
     "gari": "./bin/gari"
   },
+  "engines": {
+    "node" : ">=0.4.12"
+  },
   "dependencies": {
     "optimist": "0.3.x",
     "uglify-js": "1.2.x"
   },
-  "engines": {
-    "node" : ">=0.4.12"
+  "devDependencies": {
+    "vows": "*"
+  },
+  "scripts": {
+    "test": "vows"
   }
 }

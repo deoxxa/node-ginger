@@ -15,8 +15,8 @@
 {% if person.hobbies %}
         <ul>
           <li><strong>Hobbies</strong></li>
-{% for hobby in person.hobbies %}
-          <li>{{ hobby }}</li>
+{% for i, hobby in person.hobbies %}
+          <li>{{ i }}: {{ hobby }}</li>
 {% endfor %}
         </ul>
 {% endif %}

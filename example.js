@@ -4,7 +4,7 @@ var fs = require("fs"),
     Ginger = require("./lib/ginger");
 
 var compiler = new Ginger.Compiler(),
-    root = new Ginger.Context(); //require("./static");
+    root = new Ginger.Context();
 
 root.on_not_found = function(name, cb) {
   fs.readFile(__dirname + "/res/templates/" + name + ".ginger", function(err, data) {

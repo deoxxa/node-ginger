@@ -36,6 +36,14 @@ This is lacking right now! There are some test templates in res/*.ginger if you
 want to see all the fun stuff Ginger can currently do, though. Help with this
 point would be greatly appreciated!
 
+Testing
+-------
+
+I'm using [vows](http://vowsjs.org/) for testing. The tests are in the "test"
+directory (funnily enough). As is pretty obvious, there aren't nearly enough
+tests written yet. If you're looking for a way to contribute, tests would be a
+great place to start.
+
 Gari
 ----
 

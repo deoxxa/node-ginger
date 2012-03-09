@@ -27,9 +27,11 @@
     "uglify-js": "1.2.x"
   },
   "devDependencies": {
-    "vows": "*"
+    "vows": "0.6.x",
+    "pegjs": "0.6.x"
   },
   "scripts": {
-    "test": "vows"
+    "test": "vows",
+    "build": "pegjs res/parser.peg lib/parser.js"
   }
 }

@@ -13,7 +13,7 @@ root.on_not_found = function(name, cb) {
     }
 
     var parsed = Ginger.Parser.parse(data.toString());
-    var compiled = compiler.compile(parsed);
+    var compiled = compiler.compile(parsed, {strip_newlines: true});
 
     cb(null, new Function("ctx", "cb", compiled));
   });

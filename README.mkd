@@ -3,8 +3,16 @@ Ginger
 
 Spicy templating for node and the browser inspired by Twig, Dust and Hogan.js
 
+Build Status:  
+master: [![Build Status](https://secure.travis-ci.org/deoxxa/node-ginger.png?branch=master)](http://travis-ci.org/deoxxa/node-ginger)  
+develop: [![Build Status](https://secure.travis-ci.org/deoxxa/node-ginger.png?branch=develop)](http://travis-ci.org/deoxxa/node-ginger)  
+
 Overview
 --------
+
+```
+npm install ginger
+```
 
 Ginger is designed to be easy to use and extend, very portable and quick.
 Drawing inspiration for its syntax from Twig and jinja2, streaming rendering

@@ -35,6 +35,17 @@ number = s:"-"? p:[0-9]+ d:("." [0-9]+)? {
   };
 }
 
+list = "[" a:(list_contents?) "]" {
+  return {
+    type: "list",
+    data: a,
+  };
+}
+
+list_contents = f:expression o:("," white_space? expression)* {
+  return [f].concat(o ? o.map(function(e) { return e ? e[2] : null; }).filter(function(e) { return !!e; }) : []);
+}
+
 white_space = d:[ \r\n]+ {
   return {
     type: "white_space",
@@ -56,7 +67,7 @@ path = p:(identifier / identifier ".")+ {
   };
 }
 
-function = n:identifier a:("(" arguments? ")")? {
+function = n:identifier a:("(" list_contents? ")")? {
   return {
     type: "function",
     name: n,
@@ -64,11 +75,7 @@ function = n:identifier a:("(" arguments? ")")? {
   };
 }
 
-arguments = f:expression o:("," white_space? expression)* {
-  return [f].concat(o ? o.map(function(e) { return e ? e[2] : null; }).filter(function(e) { return !!e; }) : []);
-}
-
-expression = n:("!" white_space?)? s:(number / path / function / quoted_string) f:( "|" function )* {
+expression = n:("!" white_space?)? s:(quoted_string / number / list / path / function) f:( "|" function )* {
   return {
     source: s,
     negative: n ? true : false,

@@ -45,5 +45,9 @@ vows.describe("Parser")
       topic: "{% for x in y %}{{ x }}{% endfor %}",
       "should not throw": function(template) { assert.doesNotThrow(function() { Ginger.Parser.parse(template); }, Error); },
     },
+    "{% for x in [\"a\", \"b\"] %}{% endfor %}": {
+      topic: "{% for x in [\"a\", \"b\"] %}{% endfor %}",
+      "should not throw": function(template) { assert.doesNotThrow(function() { Ginger.Parser.parse(template); }, Error); },
+    },
   })
 .export(module);

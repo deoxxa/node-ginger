@@ -6,6 +6,10 @@ Spicy templating for node and the browser inspired by Twig, Dust and Hogan.js
 Overview
 --------
 
+```
+npm install ginger
+```
+
 Ginger is designed to be easy to use and extend, very portable and quick.
 Drawing inspiration for its syntax from Twig and jinja2, streaming rendering
 from dust and portability from Hogan.js, it is intended to bring the best

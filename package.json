@@ -1,7 +1,7 @@
 {
   "name": "ginger",
   "description": "Spicy templating for node and the browser inspired by Twig, Dust.JS and Hogan.JS",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "author": {
     "name": "Conrad Pankoff",
     "email": "deoxxa@fknsrs.biz",

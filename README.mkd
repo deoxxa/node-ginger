@@ -3,6 +3,10 @@ Ginger
 
 Spicy templating for node and the browser inspired by Twig, Dust and Hogan.js
 
+Build Status:  
+master: [![Build Status](https://secure.travis-ci.org/deoxxa/node-ginger.png?branch=master)](http://travis-ci.org/deoxxa/node-ginger)  
+develop: [![Build Status](https://secure.travis-ci.org/deoxxa/node-ginger.png?branch=develop)](http://travis-ci.org/deoxxa/node-ginger)  
+
 Overview
 --------
 
